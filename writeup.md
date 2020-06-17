@@ -18,11 +18,9 @@ The goals / steps of this project are the following:
 [image2]: ./output-images/histograms.png "Histograms"
 [image3]: ./output-images/preprocessed-image.png "Pre-processed image"
 [image4]: ./output-images/Augmented-image.png "Augmented image"
-[image5]: ./traffic-sign-images/Traffic-sign-1.png "Traffic Sign 1"
-[image6]: ./traffic-sign-images/Traffic-sign-2.png "Traffic Sign 2"
-[image7]: ./traffic-sign-images/Traffic-sign-3.png "Traffic Sign 3"
-[image8]: ./traffic-sign-images/Traffic-sign-4.png "Traffic Sign 4"
-[image9]: ./traffic-sign-images/Traffic-sign-5.png "Traffic Sign 5"
+[image5]: ./traffic-sign-images/Traffic-Signs.png "Traffic Signs"
+[image6]: ./traffic-sign-images/BarChart-Softmax.png "Bar Chart"
+[image7]: ./traffic-sign-images/FeatureMap.png "Feature Map"
 
 ## Writeup summary
 
@@ -47,7 +45,7 @@ I used the python library to calculate summary statistics of the traffic signs d
 
 #### Exploratory visualization of the dataset.
 
-To visualize an example of the traffic sign image, I defined the function 'show_traffic_sign_example(X, y)' which plots an ramdom image of the data set. Here is an image example:
+To visualize an example of the traffic sign image, I defined the function 'show_traffic_sign(X, y)' which plots a ramdom image of the data set. Here is an image example:
 
 ![alt text][image1]
 
@@ -56,7 +54,7 @@ I also create an image with the histograms of training, validation and testing d
 
 ![alt text][image2]
 
-It is possible to conclude that the distribution is not uniform through the classes of all data set. So we are towards a kind of imbalanced classification problem. Analysing the histograms image, we can also conclude that the histograms are similiar between the three data sets.
+It is possible to conclude that the distribution is not uniform through the classes of all data set. So we are towards a kind of imbalanced classification problem. Analysing the histograms image, we can also conclude that the histograms are similar between the three datasets.
 
 ### Step 2 - Design and Test a Model Architecture
 
@@ -67,12 +65,12 @@ As a first step, I decided to create the function 'normalize_image' which normal
 I created the function 'normalize_grayscale' which converts an image to YUV color space and normalize the Y channel with Min-Max scaling to a range of [0.1, 0.9]. Training the model with this pre-processing results in better accuracy.
 
 
-Here is an example of a traffic sign image before and after the pre-processing method.
+Here is an example of a traffic sign image before and after the preprocessing method.
 
 ![alt text][image3]
 
 
-It is important to normalize the image data to center the data around zero mean and have a small variance. This process helps the neural network to learn faster and have a similiar activation behaviour when each input is multiplyed by the weights and added to biases values of the neural network.
+It is important to normalize the image data to center the data around zero mean and have a small variance. This process helps the neural network to learn faster and have a similar activation behaviour when each input is multiplied by the weights and added to biases values of the neural network.
 
 
 #### Generate additional data 
@@ -80,9 +78,9 @@ It is important to normalize the image data to center the data around zero mean 
 After training the data set, the model starts to overfit to the training data set. So I decided to generate additional data to avoid overfitting. I build the new dataset by adding 4 transformed versions of the original training set, yielding 173995 samples in total. I follow the same process proposed in this [paper](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). The new samples are randomly perturbed in position ([-2,2] pixels), in scale ([.9,1.1] ratio) and rotation ([-15,+15] degrees)
 
 I created 4 functions: 'transform_image', 'resize_image', 'rotate_image' and 'translate_image' for that purposes. A description of each function is presented below:
-* 'translate_image' - randomly perturbe an image in position ([-2,2] pixels)
-* 'rotate_image'    - randomly perturbe an image in rotation ([-15,+15] degrees) 
-* 'resize_image'    - randomly perturbe an image in scale ([.9,1.1] ratio) 
+* 'translate_image' - randomly perturb an image in position ([-2,2] pixels)
+* 'rotate_image'    - randomly perturb an image in rotation ([-15,+15] degrees) 
+* 'resize_image'    - randomly perturb an image in scale ([.9,1.1] ratio) 
 * 'transform_image' - loop over all images of a data set and apply the previous process to each image
 
 The reason for applying this process is that ConvNets architectures have built-in invariance to small translations, scaling and rotations. When a dataset does not naturally contain those deformations, adding them synthetically will yield more robust learning to potential deformations in the test set.
@@ -128,20 +126,20 @@ Running over 15 times the training data set (EPOCHS = 15), I trained the model u
 
 #### Solution Approach
 
-The approach followed to find the best solution for this project was to take the infamous LeNet neural network architecture, discussed on previous lessons and improve the architeture changing some neural network parameters and adding more features. I decided to use this kind of neural network because it has a very simple architecture and it yielded very good results on previous lesson for the handwritten digit images classifier. Although the problem is not the same, many principles are. In fact the best way to recognize the traffic sign is to look to the shapes of the images, like on the handwritten digit images.
+The approach followed to find the best solution for this project was to take the infamous LeNet neural network architecture, discussed on previous lessons and improve the architecture changing some neural network parameters and adding more features. I decided to use this kind of neural network because it has a very simple architecture and it yielded very good results on previous lesson for the handwritten digit images classifier. Although the problem is not the same, many principles are. In fact the best way to recognize the traffic sign is to look to the shapes of the images, like on the handwritten digit images.
 
 Using the same LeNet neural network architecture as on previous lessons, the obtained results were not satisfied. So I follow an iterative approach until find a good solution for this problem. Below I summary the steps followed:
 
-* First I decided to change the dimensions of the LeNet layers by adding more filters to the convolution layers which improves the results. This was a very important step to take because the number of the ouptut classes for this problem is 43 instead of 10 on lesson problem, So to have better results I have to increase the number of parameters on the last fully-connected layers, which means increase the deep of the convolution layers. 
-* Second step was to deal with overfitting. After the first step I achieve good results for the training set accuracy but not for the validation set acuracy which indicates overfitting issue. To deal with that I augment the training data by translating, rotating and shifting images as explained on Step 2 of this report. However that was not enough, so I add the regularization feature Dropout in each layer. This improve considerably the validation set accuracy (higher than 0.98).
+* First I decided to change the dimensions of the LeNet layers by adding more filters to the convolution layers which improves the results. This was a very important step to take because the number of the output classes for this problem is 43 instead of 10 on lesson problem, So to have better results I have to increase the number of parameters on the last fully-connected layers, which means increase the deep of the convolution layers. 
+* Second step was to deal with overfitting. After the first step I achieve good results for the training set accuracy but not for the validation set accuracy which indicates overfitting issue. To deal with that I augment the training data by translating, rotating and shifting images as explained on Step 2 of this report. However that was not enough, so I add the regularization feature Dropout in each layer. This improve considerably the validation set accuracy (higher than 0.98).
 
 
 My final model results were:
-* training set accuracy of 0.995
-* validation set accuracy of 0.986
-* test set accuracy of 0.909
+* training set accuracy of 0.993
+* validation set accuracy of 0.990
+* test set accuracy of 0.964
 
-These results were calculated on 19 and 21 cells of the notebook.
+These results were calculated on 14th and 16th cells of the Ipython notebook 'Traffic_Sign_Classifier.ipynb'.
 
 ### Analyse the misclassified labels of the validation set
 
@@ -149,47 +147,67 @@ During the iterative approach to find a good solution for the neural network arc
 
 ### Step 3 - Use the model to make predictions on new images
 
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are five German traffic signs that I found on the web and load to the notebook:
 
-![alt text][image5] ![alt text][image6] ![alt text][image7] 
-![alt text][image8] ![alt text][image9]
+![alt text][image5] 
 
-I decided to chose 2 pairs of similar images to verify how the model behaves. The image 1 and 3 have both a red circle with shapes inside of the circle. The image 4 and 5 have both blue circles and white signs inside of it. 
+I decided to chose 2 pairs of similar images to verify how the model behaves.  The image 1 and 2 have both a blue circle and white signs inside of it. The image 3 and 5 have both a red circle with shapes inside of the circle.
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+It is important to note that the image 4 has a different shape than others and all of them need to be resized to 32x32.
+
+#### Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| No passing truck 		| No passing truck 	   							| 
 | Turn right only		| Turn right only								|
 | Ahead only			| Ahead only									|
-| Pedestrians      		| Pedestrians					 				|
 | 30 km/h       		| 30 km/h      							        |
+| Pedestrians      		| Road narrows on the right		 				|
+| No passing truck 		| No passing truck 	   							| 
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares unfavorably to the accuracy on the test set of around 90%. This 5 traffic signs is a very small sample to make any conclusion about the accuracy of the model. However analyzing the image with the incorrect predictions (image 4), the prediction ("Road narrows on the right") is a traffic sign with similar aspects of the label one ("Pedestrians"). Actually both traffic signs has a red triangle with black lines inside.  
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+### Step 4 - Analyze the softmax probabilities of the new images
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+#### Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+The code for calculating the softmax probabilities of the new images is located in the 20th cell of the Ipython notebook.
+
+The result of the top five softmax probabilities for each image can be visualized on the following image:
+
+![alt text][image6] 
+
+A table of the best softmax probabilities for each image is:
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60 		            | No passing truck 	   							| 
-| .20		            | Turn right only								|
-| .05			        | Ahead only									|
-| .04      		        | Pedestrians					 				|
-| .01       		    | 30 km/h      							        |
+| .99		            | Turn right only								|
+| .99		            | Ahead only									|
+| .99		            | 30 km/h      							        |
+| .50		            | Road narrows on the right		 				|
+| .86		            | No passing truck 	   							| 
 
-For the second image ... 
+
+
+For the first three images, the model is pretty sure about its predictions (probability of 0.99) and its predictions are correct. For the fourth image, the model has around fifty percent sure about its prediction (probability of 0.50) however its prediction is incorrect. The correct label is the second best softmax probability (probability of 0.26). 
+For the fifth image, the model is relatively sure about its prediction (probability of 0.86) and it is correct.
+
+Analyzing the Bar chart, it is possible to verify that the model just results comparable top five softmax probabilities for the image 4 (yellow color). For the other images, the first softmax probability is much higher than the remaining ones.
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+
+To visualize the Neural Network's state, I turn the layer_1, layer_2, layer_3, layer_4, layer_5 as global variables and pass one of them as argument of the function 'outputFeatureMap'.
+
+The result for the layer_1 is:
+
+![alt text][image7]
+
+From the image, we can see 32 feature maps representing each convolution filter. Looking to each feature map is possible to note that this layer try to capture simple shape like circles, 
 
 
