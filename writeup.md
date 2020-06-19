@@ -130,19 +130,19 @@ The approach followed to find the best solution for this project was to take the
 Using the same LeNet neural network architecture as on previous lessons, the obtained results were not satisfied. So I follow an iterative approach until find a good solution for this problem. Below I summary the steps followed:
 
 * First I decided to change the dimensions of the LeNet layers by adding more filters to the convolution layers which improves the output results. This was a very important step because the number of the output classes for this problem is 43 instead of 10 on lesson problem. So to have better results I have to increase the number of parameters on the last fully-connected layers, which means increase the deep of the convolution filters. 
-* Second step was to deal with overfitting. After the first step I achieve good results for the training set accuracy but not for the validation set accuracy which indicates overfitting issue. To deal with that I augmented the training data by translating, rotating and shifting images as explained on Step 2 of this report. However that was not enough, so I add the regularization feature Dropout in each layer. This improve considerably the validation set accuracy (higher than 0.97).
+* Second step was to deal with overfitting. After the first step I achieve good results for the training set accuracy but not for the validation set accuracy which indicates overfitting issue. To deal with that I augmented the training data by translating, rotating and shifting images as explained on Step 2 of this report. However that was not enough, so I add the regularization feature Dropout in each layer. This improve considerably the validation set accuracy (higher than 0.98).
 
 
 My final model results were:
-* training set accuracy of 0.990
-* validation set accuracy of 0.976
-* test set accuracy of 0.959
+* training set accuracy of 0.991
+* validation set accuracy of 0.984
+* test set accuracy of 0.960
 
 These results were calculated on 14th and 16th cells of the Ipython notebook 'Traffic_Sign_Classifier.ipynb'.
 
 ### Analyse the misclassified labels of the validation set
 
-During the iterative approach to find a good solution for the neural network architecture, I analysed the misclassified labels of the validation set to verify what are the classes with most incorrect predictions and to check if the validation set accuracy is uniform through the classes. I could conclude that the neural network has different accuracies through the classes. Actually, the classes 16, 40 and 41 have an accuracy lower than 80%. A possible explanation for this result can be that these classes have few training data set as other classes. 
+During the iterative approach to find a good solution for the neural network architecture, I analysed the misclassified labels of the validation set to verify what are the classes with most incorrect predictions and to check if the validation set accuracy is uniform through the classes. I could conclude that the neural network has different accuracies through the classes. Actually, the classes 0 and 21 have an accuracy lower than 80%. A possible explanation for this result can be that these classes have few training data set as other classes. 
 
 ### Step 3 - Use the model to make predictions on new images
 
@@ -165,11 +165,11 @@ Here are the results of the prediction:
 | Turn right only		| Turn right only								|
 | Ahead only			| Ahead only									|
 | 30 km/h       		| 30 km/h      							        |
-| Pedestrians      		| Road narrows on the right		 				|
+| Pedestrians      		| Traffic signals         		 				|
 | No passing truck 		| No passing truck 	   							| 
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares unfavorably to the accuracy on the test set of around 96%. This 5 traffic signs is a very small sample to make any conclusion about the accuracy of the model. However analyzing the image with the incorrect predictions (image 4), the prediction ("Road narrows on the right") is a traffic sign with similar aspects of the label one ("Pedestrians"). Actually both traffic signs has a red triangle with black lines inside.  
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares unfavorably to the accuracy on the test set of around 96%. This 5 traffic signs is a very small sample to make any conclusion about the accuracy of the model. However analyzing the image with the incorrect prediction (image 4), the prediction ("Traffic signals") is a traffic sign with similar aspects of the label one ("Pedestrians"). Actually both traffic signs has a red triangle with some shapes inside.  
 
 ### Step 4 - Analyze the softmax probabilities of the new images
 
@@ -186,17 +186,17 @@ A table of the best softmax probabilities for each image is:
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | .99		            | Turn right only								|
-| .54		            | Ahead only									|
-| .97		            | 30 km/h      							        |
-| .96		            | Road narrows on the right		 				|
-| .99		            | No passing truck 	   							| 
+| .99		            | Ahead only									|
+| .99		            | 30 km/h      							        |
+| .31		            | Traffic signals           	 				|
+| .96		            | No passing truck 	   							| 
 
 
-Except for the image 2, the model is pretty sure about its predictions (probability higher than 0.95) and for the image 2, the model has around fifty percent sure about its prediction (probability of 0.50). 
+Except for the image 4, the model is pretty sure about its predictions (probability higher than 0.95). For the image 4, the model just has 31% sure about its prediction. 
 
-For the images 1, 3 and 5, the model predict correctly the class with high certainty but the prediction for image 4 is incorrect although its high certaintly. For the image 2 the model is not sure about its prediciton but it is correct.
+For the images 1, 2, 3 and 5, the model predicts correctly the class with high certainty but for image 4 the prediction has lower certainty and it is incorrect. 
 
-Analyzing the Bar chart, it is possible to verify that the model just results comparable top five softmax probabilities for the image 2 (red color). For the other images, the first softmax probability is much higher than the remaining ones.
+Analyzing the Bar chart, it is possible to verify that the model just results comparable top five softmax probabilities for the image 4 (yellow color). Actually for this image, the second high softmax probability value (0.21) is close to the first one and its prediction is the correct label. The third high softmax probability is 0.18, the forth high softmax probability is 0.16 and the fifht high softmax probability is 0.08. For the other images, the first softmax probability is much higher than the remaining ones.
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
